@@ -3,9 +3,11 @@
 const btAdicionarTarefa = document.querySelector('.app__button--add-task') //Const criada para se referenciar ao botão de tarefa
 const formAdicionarTarefa = document.querySelector('.app__form-add-task')
 const textarea = document.querySelector('.app__form-textarea') //Const para interação com o usuario que digitou no formulário
-const ulTarefas = document.querySelector('.app__section-task-list')
+const ulTarefas = document.querySelector('.app__section-task-list') // Const da ul para fazer append do li
 
-const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+const tarefas = JSON.parse(localStorage.getItem('tarefas')) || []; // Troquei o array vazio e chamei localStorage recebendo a chave de acesso 'tarefas' e fiz o inverso do stringfy da linha 47, agora fiz o inverso então antes do localStorage chamei o JSON.parse
+
+//Quando usamos o método JSON.parse(), ele converte uma string em um objeto JavaScript, assumindo que a string seja um JSON válido. Se a string não estiver formatada corretamente como JSON, ou se algo estiver fora do lugar, isso resultará em um erro no console. Se o retorno for algo que não é um array, ou seja for um 'undefined' ou um 'null', tem que fazer um || e colocar um array vazio.
 
 //Criação da referência HTML li
 function criarElementoTarefa(tarefa){ //Função de criar tarefas, passei tarefa como parâmetro pois preciso saber qual tarefa quero criar
@@ -35,7 +37,7 @@ function criarElementoTarefa(tarefa){ //Função de criar tarefas, passei tarefa
     li.append(paragrafo)
     li.append(botao)
 
-    return li
+    return li //Vai criar o elemento li e retornar
 }
 
 btAdicionarTarefa.addEventListener('click', () =>{  //Evento de click pro botão adicionar tarefa
@@ -51,7 +53,7 @@ formAdicionarTarefa.addEventListener('submit', (evento) => { //Adicionando evend
     localStorage.setItem('tarefas', JSON.stringify(tarefas)) //Armazenamento local para guardar a lista, primeiro passamos a string 'tarefas' que é a chave de acesso do valor depois utilizo o JSON.stringfy que vai transformar um objeto em string e assim entendo que o localStorage só sabe trabalhar com strings, se for algo mais complexo temos que utilizar a a API JSON
 })
 
-tarefas.forEach(tarefa => {
+tarefas.forEach(tarefa => { //Função que da acesso à tarefas da vez, ou seja ele vai iterar todas as tarefas
     const elementoTarefa = criarElementoTarefa(tarefa)
-    ulTarefas.append(elementoTarefa)
+    ulTarefas.append(elementoTarefa) //Metódo para para receber o elemento tarefa
 });
