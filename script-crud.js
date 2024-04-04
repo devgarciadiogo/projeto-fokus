@@ -7,6 +7,10 @@ const ulTarefas = document.querySelector('.app__section-task-list') // Referênc
 
 const tarefas = JSON.parse(localStorage.getItem('tarefas')) || []; // Recupera as tarefas do armazenamento local, ou cria um array vazio se não houver
 
+function atualizarTarefas () { //Função de atualizar tarefas para fazer encapsulamento do local storage
+    localStorage.setItem('tarefas', JSON.stringify(tarefas))
+}
+
 // Função para criar um elemento de tarefa HTML referencia 
 function criarElementoTarefa(tarefa){
     const li = document.createElement('li') // Cria um elemento <li>
@@ -30,6 +34,8 @@ function criarElementoTarefa(tarefa){
     botao.onclick = () => { // Recebe a função que queremos executar quando esse elemento for clicado
         const novaDescrição = prompt("Qual é o novo nome da tarefa?") //prompt para o usuario informar o nome correto da tarefa 
         paragrafo.textContent = novaDescrição // Código pra sobreescrever a descrição com a nova descrição digitada pelo usuario no prompt
+        tarefa.descricao = novaDescrição //Pegamos a nova descrição do prompt pra fazer o update do local storage
+        atualizarTarefas() // Chamando a função de alterar tarefa do localStorage
     }
     
     const imagemBotao = document.createElement('img') // Cria um elemento <img> para o botão do HTML de referencia
@@ -55,8 +61,7 @@ formAdicionarTarefa.addEventListener('submit', (evento) => { /// Adiciona um ouv
     tarefas.push(tarefa) // Adiciona a nova tarefa ao array de tarefas
     const elementoTarefa =  criarElementoTarefa(tarefa) //Const para colocar item da tarefa na tela
     ulTarefas.append(elementoTarefa)  // Adiciona o elemento de tarefa à lista de tarefas
-    localStorage.setItem('tarefas', JSON.stringify(tarefas)) //Armazenamento local para guardar a lista, primeiro passo a string 'tarefas' que é a chave de acesso do valor depois utilizo o JSON.stringfy que vai transformar um objeto em string e assim entendo que o localStorage só sabe trabalhar com strings, se for algo mais complexo temos que utilizar a a API JSON
-    textarea.value = '' // Limpa o campo de texto do formulário
+    atualizarTarefas() // Chamando a função de atualizar tarefa do local storage
     formAdicionarTarefa.classList.add('hidden') //Esconde o formulário
 })
 
