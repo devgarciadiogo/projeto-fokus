@@ -17,23 +17,24 @@ function criarElementoTarefa(tarefa){ //Função de criar tarefas, passei tarefa
     const svg = document.createElement('svg') // Criação do elemento svg
     //innerHTML que recebeu um intepolação de strings
     svg.innerHTML = `
-    <svg>
-        <svg class="app__section-task-icon-status" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="app__section-task-icon-status" width="24" height="24" viewBox="0 0 24 24" fill="none"   xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="12" fill="#FFF"></circle>
             <path d="M9 16.1719L19.5938 5.57812L21 6.98438L9 18.9844L3.42188 13.4062L4.82812 12L9 16.1719Z" fill="#01080E"></path>
         </svg>
-    </svg>
     ` 
 
     const paragrafo = document.createElement('p') //Criação do elemento paragrafo
-    paragrafo.textContent = tarefa.descricao //textContext pois me referi especificamente a texto, o conteúdo do texto é a descrição da tarefa que recebi por parametro, então utilizo o tarefa.descricao.
+    paragrafo.textContent = tarefa.descricao //textContext pois me referi especificamente a texto, o conteúdo do texto é a descrição da tarefa que recebi por parametro, então utilizo o tarefa.descricao. 
+    paragrafo.classList.add('app__section-task-list-item-description') //Adicionando classe para o paragrafo do nosso html de referencia
 
     const botao = document.createElement('button') //Criação do elemento botão 
+    botao.classList.add('app_button-edit') //Adicionando classe para o botão do nosso html de referencia
+    
     const imagemBotao = document.createElement('img') //Criando imagem do botão que tem no HTML refêrencia
-    imagemBotao.setAttribute('src', '/imagen/edit.png') //Definindo a imagem com o setAttibute passando o atributo src e o valor que no caso é o caminho da imagem
+    imagemBotao.setAttribute('src', '/imagens/edit.png') //Definindo a imagem com o setAttibute passando o atributo src e o valor que no caso é o caminho da imagem
     botao.append(imagemBotao) //Chamo o botão append com a imagem do botão para atribuir o botão a sua imagem
 
-    li.append(svg) //Chamando o li e atribhindo cada elemento que criei nas constantes
+    li.append(svg) //Chamando o li e atribuindo cada elemento que criei nas constantes
     li.append(paragrafo)
     li.append(botao)
 
@@ -50,7 +51,11 @@ formAdicionarTarefa.addEventListener('submit', (evento) => { //Adicionando evend
         descricao: textarea.value //Criando um objeto para receber uma tarefa = valor do text area
     }
     tarefas.push(tarefa) //Função para receber a tarefa e colocar ela dentro de uma lista
+    const elementoTarefa =  criarElementoTarefa(tarefa) //Const para colocar item da tarefa na tela
+    ulTarefas.append(elementoTarefa) //Recebe o elemento tarefa que acabei de criar
     localStorage.setItem('tarefas', JSON.stringify(tarefas)) //Armazenamento local para guardar a lista, primeiro passamos a string 'tarefas' que é a chave de acesso do valor depois utilizo o JSON.stringfy que vai transformar um objeto em string e assim entendo que o localStorage só sabe trabalhar com strings, se for algo mais complexo temos que utilizar a a API JSON
+    textarea.value = '' //Limpa o formulário
+    formAdicionarTarefa.classList.add('hidden') //Esconde o formulário
 })
 
 tarefas.forEach(tarefa => { //Função que da acesso à tarefas da vez, ou seja ele vai iterar todas as tarefas
