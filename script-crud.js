@@ -4,6 +4,7 @@ const btAdicionarTarefa = document.querySelector('.app__button--add-task')
 const formAdicionarTarefa = document.querySelector('.app__form-add-task')
 const textarea = document.querySelector('.app__form-textarea') // Referência ao campo de texto do formulário
 const ulTarefas = document.querySelector('.app__section-task-list') // Referência à lista de tarefas    
+const btnCancelar = document.querySelector('.app__form-footer__button--cancel') //Selecionando o botão de Cancelar que adicionamos ao formulário
 
 const tarefas = JSON.parse(localStorage.getItem('tarefas')) || []; // Recupera as tarefas do armazenamento local, ou cria um array vazio se não houver
 
@@ -32,10 +33,15 @@ function criarElementoTarefa(tarefa){
     botao.classList.add('app_button-edit') // Adiciona classe ao botão
 
     botao.onclick = () => { // Recebe a função que queremos executar quando esse elemento for clicado
+        debugger //Função para depurar e mostrar linha a linha o que está executando
         const novaDescrição = prompt("Qual é o novo nome da tarefa?") //prompt para o usuario informar o nome correto da tarefa 
-        paragrafo.textContent = novaDescrição // Código pra sobreescrever a descrição com a nova descrição digitada pelo usuario no prompt
-        tarefa.descricao = novaDescrição //Pegamos a nova descrição do prompt pra fazer o update do local storage
-        atualizarTarefas() // Chamando a função de alterar tarefa do localStorage
+        console.log('Nova Descrição da tarefa: ', novaDescrição) //Mostrar no console a nova descrição que o usuário quer inserir
+        if (novaDescrição){ //if criado para saber se existir algum valor na novaDescrição
+            paragrafo.textContent = novaDescrição // Código pra sobreescrever a descrição com a nova descrição digitada pelo usuario no prompt
+            tarefa.descricao = novaDescrição //Pegamos a nova descrição do prompt pra fazer o update do local storage
+            atualizarTarefas() // Chamando a função de alterar tarefa do localStorage
+        }
+       
     }
     
     const imagemBotao = document.createElement('img') // Cria um elemento <img> para o botão do HTML de referencia
@@ -69,3 +75,10 @@ tarefas.forEach(tarefa => { // Itera sobre todas as tarefas, criando elementos H
     const elementoTarefa = criarElementoTarefa(tarefa)
     ulTarefas.append(elementoTarefa) // Adiciona o elemento de tarefa à lista de tarefas
 });
+
+const limparFormulario = () => { //Função para limpar conteúdo do textarea e esconder o formulário
+    textarea.value = ''; //Limpa o conteúdo do textarea
+    formualarioTarefa.classList.add('hidden'); // Adiciona a classe 'hidden' ao formulário para escondê-lo
+}
+
+btnCancelar.addEventListener('click', limparFormulario); //Associando a função limparFormulario ao evento de clique do botão Cancelar
