@@ -7,7 +7,9 @@ const ulTarefas = document.querySelector('.app__section-task-list') // Referênc
 const btnCancelar = document.querySelector('.app__form-footer__button--cancel') //Selecionando o botão de Cancelar que adicionamos ao formulário
 const paragrafoDescricaoTarefa=document.querySelector('.app__section-active-task-description')
 
-const tarefas = JSON.parse(localStorage.getItem('tarefas')) || []; // Recupera as tarefas do armazenamento local, ou cria um array vazio se não houver
+const btnRemoverConcluidas = document.querySelector('#btn-remover-concluidas')
+
+let tarefas = JSON.parse(localStorage.getItem('tarefas')) || []; // Recupera as tarefas do armazenamento local, ou cria um array vazio se não houver
 let tarefaSelecionada = null
 let liTarefaSelecionada = null
 
@@ -120,3 +122,12 @@ document.addEventListener('FocoFinalizado', () => {
         atualizarTarefas()
     }
 })
+
+btnRemoverConcluidas.onclick = () => {
+    const seletor = ".app__section-task-list-item-complete"
+    document.querySelectorAll(seletor).forEach(elemento => {
+        elemento.remove()
+    })
+    tarefas = tarefas.filter(tarefa => !tarefa.completa)
+    atualizarTarefas()
+}
