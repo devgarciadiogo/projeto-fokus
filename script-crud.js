@@ -5,8 +5,11 @@ const formAdicionarTarefa = document.querySelector('.app__form-add-task')
 const textarea = document.querySelector('.app__form-textarea') // Referência ao campo de texto do formulário
 const ulTarefas = document.querySelector('.app__section-task-list') // Referência à lista de tarefas    
 const btnCancelar = document.querySelector('.app__form-footer__button--cancel') //Selecionando o botão de Cancelar que adicionamos ao formulário
+const paragrafoDescricaoTarefa=document.querySelector('.app__section-active-task-description')
 
 const tarefas = JSON.parse(localStorage.getItem('tarefas')) || []; // Recupera as tarefas do armazenamento local, ou cria um array vazio se não houver
+let tarefaSelecionada = null
+let liTarefaSelecionada = null
 
 function atualizarTarefas () { //Função de atualizar tarefas para fazer encapsulamento do local storage
     localStorage.setItem('tarefas', JSON.stringify(tarefas))
@@ -33,9 +36,9 @@ function criarElementoTarefa(tarefa){
     botao.classList.add('app_button-edit') // Adiciona classe ao botão
 
     botao.onclick = () => { // Recebe a função que queremos executar quando esse elemento for clicado
-        debugger //Função para depurar e mostrar linha a linha o que está executando
+        //debugger //Função para depurar e mostrar linha a linha o que está executando
         const novaDescrição = prompt("Qual é o novo nome da tarefa?") //prompt para o usuario informar o nome correto da tarefa 
-        console.log('Nova Descrição da tarefa: ', novaDescrição) //Mostrar no console a nova descrição que o usuário quer inserir
+        //console.log('Nova Descrição da tarefa: ', novaDescrição) //Mostrar no console a nova descrição que o usuário quer inserir
         if (novaDescrição){ //if criado para saber se existir algum valor na novaDescrição
             paragrafo.textContent = novaDescrição // Código pra sobreescrever a descrição com a nova descrição digitada pelo usuario no prompt
             tarefa.descricao = novaDescrição //Pegamos a nova descrição do prompt pra fazer o update do local storage
@@ -51,6 +54,24 @@ function criarElementoTarefa(tarefa){
     li.append(svg) // Adiciona o elemento <svg> ao <li>
     li.append(paragrafo) // Adiciona o parágrafo ao <li>
     li.append(botao) // Adiciona o botão ao <li>
+
+    li.onclick = () => {
+        document.querySelectorAll('.app__section-task-list-item-active')
+        .forEach(elemento => {
+            elemento.classList.remove('app__section-task-list-item-active')
+        })
+        if (tarefaSelecionada == tarefa) {
+            paragrafoDescricaoTarefa.textContent = ''
+            tarefaSelecionada = null
+            liTarefaSelecionada = null
+            return
+        }
+        tarefaSelecionada = tarefa
+        liTarefaSelecionada = li
+        paragrafoDescricaoTarefa.textContent = tarefa.descricao
+       
+        li.classList.add('app__section-task-list-item-active')
+    }
 
     return li // Retorna o elemento <li> criado
 }
@@ -82,3 +103,11 @@ const limparFormulario = () => { //Função para limpar conteúdo do textarea e 
 }
 
 btnCancelar.addEventListener('click', limparFormulario); //Associando a função limparFormulario ao evento de clique do botão Cancelar
+
+document.addEventListener('FocoFinalizado', () => {
+    if (tarefaSelecionada && liTarefaSelecionada) {
+        liTarefaSelecionada.classList.remove('app__section-task-list-item-active')
+        liTarefaSelecionada.classList.add('app__section-task-list-item-complete')
+        liTarefaSelecionada.querySelector('button').setAttribute('disabled', 'disabled')
+    }
+})
